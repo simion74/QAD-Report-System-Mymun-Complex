@@ -4,14 +4,690 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QAD Report System — Mymun Complex</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<!-- CSS FILE -->
-<link rel="stylesheet" href="style.css">
-</head>
+<style>
+:root {
+  --green-dark:   #0a5c3e;
+  --green-mid:    #127a52;
+  --green-light:  #1a9e68;
+  --green-pale:   #e8f5ee;
+  --green-faint:  #f2faf6;
+  --white:        #ffffff;
+  --off-white:    #f7fbf9;
+  --border:       rgba(10,92,62,0.15);
+  --border-mid:   rgba(10,92,62,0.25);
+  --text-dark:    #0c2b1e;
+  --text-mid:     #2d5c45;
+  --text-muted:   #7aab93;
+  --gold:         #002AA8;
+  --shadow-sm:    0 2px 10px rgba(10,92,62,0.08);
+  --shadow-md:    0 6px 28px rgba(10,92,62,0.13);
+  --shadow-lg:    0 16px 50px rgba(10,92,62,0.18);
+}
 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  color: var(--text-dark);
+
+  background:
+    radial-gradient(ellipse 75% 50% at 0% 0%,   rgba(10,92,62,0.13) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 55% at 100% 100%, rgba(26,158,104,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%,  rgba(255,255,255,0.9) 0%, transparent 80%),
+    linear-gradient(160deg, #edf7f2 0%, #f8fdfb 40%, #eaf5f0 100%);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(11,122,94,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(11,122,94,0.06) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+  z-index: 0;
+  animation: gridDrift 20s linear infinite;
+}
+
+@keyframes gridDrift {
+  0%   { transform: translate(0,0); }
+  100% { transform: translate(60px, 60px); }
+}
+
+/* ══════════════════════════════
+   TOP BAR — Rich Multi-layer Gradient
+══════════════════════════════ */
+.top-bar {
+  position: relative;
+  z-index: 10;
+  padding: 0 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  box-shadow:
+    0 4px 24px rgba(10,92,62,0.35),
+    0 1px 0 rgba(255,255,255,0.08) inset;
+  min-height: 80px;
+  overflow: hidden;
+
+  /* ── Rich layered gradient ── */
+  background:
+    radial-gradient(ellipse 60% 120% at 0% 50%,   rgba(0,180,100,0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 100% at 100% 50%,  rgba(0,80,200,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 80%  at 50% 0%,    rgba(255,255,255,0.07) 0%, transparent 50%),
+    linear-gradient(125deg,
+      #062e1f 0%,
+      #0a5c3e 22%,
+      #0e7a52 42%,
+      #127a52 58%,
+      #0a6644 75%,
+      #063d28 88%,
+      #041f15 100%
+    );
+}
+
+/* Subtle noise/texture overlay */
+.top-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 0.35;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* accent line at very top */
+.top-bar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(26,200,120,0.6) 15%,
+    rgba(255,255,255,0.9) 35%,
+    rgba(180,220,255,0.7) 50%,
+    rgba(255,255,255,0.9) 65%,
+    rgba(26,200,120,0.6) 85%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 4s linear infinite;
+  z-index: 1;
+}
+@keyframes shimmer { to { background-position: 200% 0; } }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  position: relative;
+  z-index: 2;
+}
+
+.logo-ring {
+  position: relative;
+  width: 62px; height: 62px;
+  flex-shrink: 0;
+}
+.logo-ring::before {
+  content: '';
+  position: absolute; inset: -3px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(255,255,255,0.9),
+  rgba(16,181,2,0.7),
+  rgba(255,255,255,0.9),
+  rgba(11,55,179,0.7),
+  rgba(255,255,255,0.9)
+);
+  animation: spin 6s linear infinite;
+}
+.logo-ring::after {
+  content: '';
+  position: absolute; inset: 1px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.logo {
+  position: absolute; inset: 5px;
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  border-radius: 50%;
+  object-fit: contain;
+  z-index: 1;
+  padding: 3px;
+}
+
+.brand-text {
+  position: relative;
+  z-index: 2;
+}
+.brand-text h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 3px;
+  line-height: 1;
+  animation: fadeDown 0.7s ease both;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3), 0 0 30px rgba(26,200,120,0.2);
+}
+.brand-text p {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  color: rgba(255,255,255,0.65);
+  margin-top: 5px;
+  text-transform: uppercase;
+  animation: fadeDown 0.7s 0.1s ease both;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.date-chip {
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
+  border-radius: 10px;
+  padding: 10px 20px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  animation: fadeDown 0.7s 0.2s ease both;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.date-chip .dc-label {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.55);
+  text-transform: uppercase;
+}
+.date-chip .dc-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  color: #ffd700;
+  margin-top: 3px;
+  white-space: nowrap;
+  text-shadow: 0 1px 8px rgba(255,215,0,0.4);
+}
+
+/* ══════════════════════════════
+   NAVBAR
+══════════════════════════════ */
+.navbar-wrap {
+  position: relative;
+  z-index: 10;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  padding: 0 36px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: fadeDown 0.7s 0.3s ease both;
+}
+
+.nav-item { position: relative; }
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 16px 22px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--text-mid);
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all 0.25s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-btn:hover {
+  color: var(--green-dark);
+  border-bottom-color: var(--green-dark);
+  background: var(--green-faint);
+}
+
+.nav-btn .nb-icon {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  background: var(--green-pale);
+  color: var(--green-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  transition: all 0.25s;
+}
+.nav-btn:hover .nb-icon { background: var(--green-dark); color: #fff; }
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 0 0 14px 14px;
+  border-top: 3px solid var(--green-dark);
+  padding: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: all 0.22s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: var(--shadow-md);
+  z-index: 200;
+}
+.nav-item:hover .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
+
+.dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-mid);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.dropdown a .dd-icon {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  background: var(--green-pale);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  color: var(--green-dark);
+  flex-shrink: 0;
+  transition: all 0.18s;
+}
+.dropdown a:hover { background: var(--green-faint); color: var(--green-dark); padding-left: 18px; }
+.dropdown a:hover .dd-icon { background: var(--green-dark); color: #fff; }
+
+/* ══════════════════════════════
+   PAGE BODY / CONTENT AREA
+══════════════════════════════ */
+.page-body {
+  position: relative;
+  z-index: 1;
+  padding: 36px 40px;
+}
+
+.welcome-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--green-dark);
+  border-radius: 16px;
+  padding: 26px 32px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  animation: fadeDown 0.7s 0.4s ease both;
+  max-width: 680px;
+}
+.wc-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  background: var(--green-pale);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.wc-text h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--green-dark);
+  font-weight: 700;
+}
+.wc-text p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+/* ══════════════════════════════
+   POPUP
+══════════════════════════════ */
+.popup {
+  position: fixed; inset: 0;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(8,30,20,0.55);
+  backdrop-filter: blur(8px);
+  z-index: 999;
+}
+
+.popup-content {
+  background: var(--off-white);
+  border: 1px solid var(--border-mid);
+  border-top: 4px solid var(--green-dark);
+  border-radius: 20px;
+  padding: 34px 30px 28px;
+  width: 97%;
+  max-width: 1220px;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: popIn 0.32s cubic-bezier(0.34,1.56,0.64,1);
+  position: relative;
+}
+
+@keyframes popIn {
+  from { opacity:0; transform: scale(0.94) translateY(18px); }
+  to   { opacity:1; transform: scale(1) translateY(0); }
+}
+
+.popup-content::-webkit-scrollbar { width: 5px; }
+.popup-content::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 10px; }
+
+.close-btn {
+  position: absolute;
+  top: 16px; right: 18px;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--green-pale);
+  border: 1px solid var(--border);
+  color: var(--green-dark);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  font-weight: 700;
+}
+.close-btn:hover { background: #fde8e8; border-color: rgba(200,50,50,0.3); color: #b91c1c; transform: rotate(90deg); }
+
+#formBox h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--green-dark);
+  margin-bottom: 22px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--green-pale);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-bar label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--green-dark);
+  text-transform: uppercase;
+}
+
+.filter-bar input[type="date"],
+.filter-bar select {
+  background: var(--green-faint);
+  border: 1px solid var(--border-mid);
+  border-radius: 8px;
+  padding: 8px 14px;
+  color: var(--text-dark);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-bar input[type="date"]:focus,
+.filter-bar select:focus {
+  border-color: var(--green-dark);
+  box-shadow: 0 0 0 3px rgba(10,92,62,0.1);
+  background: #fff;
+}
+.filter-bar select option { background: #fff; }
+
+/* ══════════════════════════════
+   TABLE
+══════════════════════════════ */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border-mid);
+  box-shadow: var(--shadow-sm);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  table-layout: fixed;
+  min-width: 700px;
+  background: var(--white);
+}
+
+table tr:first-child th {
+  font-family: 'Playfair Display', serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  background: var(--green-dark);
+  color: #fff;
+  padding: 11px 6px;
+  letter-spacing: 0.4px;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+table tr:not(:first-child) th,
+table tr:not(:first-child) td {
+  font-weight: 400;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  padding: 5px 4px;
+  color: var(--text-dark);
+}
+
+th, td {
+  border: 1px solid rgba(10,92,62,0.14);
+  text-align: center;
+  overflow: hidden;
+}
+
+.section th {
+  background: #1a6644 !important;
+  color: rgba(255,255,255,0.92) !important;
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  padding: 6px 4px !important;
+  border-color: rgba(255,255,255,0.1) !important;
+}
+
+.sub-header th {
+  background: #e2f0e9 !important;
+  color: var(--text-mid) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  padding: 5px 3px !important;
+}
+
+table tbody tr:nth-child(even) { background: var(--green-faint); }
+table tbody tr:hover { background: #dff2ea; }
+
+td input {
+  width: 100%;
+  border: none;
+  text-align: center;
+  padding: 6px 3px;
+  background: transparent;
+  box-sizing: border-box;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-dark);
+  outline: none;
+}
+td:has(input:focus) {
+  background: #c8edda !important;
+  outline: 2px solid var(--green-mid);
+  outline-offset: -2px;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+.shift-badge {
+  display: inline-block;
+  padding: 3px 11px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.5px;
+}
+.shift-A { background: rgba(10,92,62,0.12); color: var(--green-dark); border: 1px solid rgba(10,92,62,0.2); }
+.shift-B { background: rgba(184,134,11,0.1); color: #92690a; border: 1px solid rgba(184,134,11,0.25); }
+.shift-C { background: rgba(80,60,180,0.08); color: #4c3a99; border: 1px solid rgba(80,60,180,0.2); }
+
+.action-bar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.btn {
+  padding: 11px 30px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all 0.22s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+}
+
+.btn-clear {
+  background: #fff;
+  border: 1.5px solid rgba(185,28,28,0.3);
+  color: #b91c1c;
+}
+.btn-clear:hover { background: #fef2f2; box-shadow: 0 4px 16px rgba(185,28,28,0.15); transform: translateY(-1px); }
+
+.btn-submit {
+  background: linear-gradient(135deg, var(--green-dark), var(--green-light));
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(10,92,62,0.3);
+}
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(10,92,62,0.4); }
+
+.toast {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  background: #fff;
+  border: 1px solid rgba(10,92,62,0.3);
+  border-left: 4px solid var(--green-dark);
+  border-radius: 12px;
+  padding: 14px 22px;
+  color: var(--green-dark);
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-md);
+  z-index: 9999;
+  transform: translateY(80px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+.wait-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+}
+.wait-screen .spinner {
+  width: 44px; height: 44px;
+  border: 3px solid var(--green-pale);
+  border-top-color: var(--green-dark);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+.wait-screen p {
+  font-size: 14px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+.spinner {
+  width: 50px; height: 50px;
+  border: 6px solid #eee;
+  border-top: 6px solid #0a5c3e;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  margin-top: 10px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.hidden { display: none; }
+
+</style>
+</head>
 <body>
 
 <!-- ══ TOP BAR ══ -->
@@ -22,7 +698,7 @@
     </div>
     <div class="brand-text">
       <h1>MYMUN COMPLEX</h1>
-      <p>QAD Report System · Quality Assurance Division</p>
+      <p>QAD Report System &nbsp;·&nbsp; Quality Assurance Division</p>
     </div>
   </div>
   <div class="date-chip">
@@ -37,11 +713,37 @@
     <a class="nav-btn">
       <span class="nb-icon"><i class="fa fa-pen"></i></span>
       Report Entry
+      <i class="fa fa-chevron-down" style="font-size:10px;opacity:0.5;margin-left:2px;"></i>
     </a>
     <div class="dropdown">
-      <a onclick="openForm('handover')"><span class="dd-icon"><i class="fa fa-exchange-alt"></i></span> Handover Status</a>
-      <a onclick="openForm('qc')"><span class="dd-icon"><i class="fa fa-microscope"></i></span> QC WIP</a>
-      <a onclick="openForm('pd')"><span class="dd-icon"><i class="fa fa-truck"></i></span> PD Delivery</a>
+      <a onclick="openForm('handover')">
+        <span class="dd-icon"><i class="fa fa-exchange-alt"></i></span> Handover Status
+      </a>
+      <a onclick="openForm('qc')">
+        <span class="dd-icon"><i class="fa fa-microscope"></i></span> QC WIP
+      </a>
+      <a onclick="openForm('pd')">
+        <span class="dd-icon"><i class="fa fa-truck"></i></span> PD Delivery
+      </a>
+    </div>
+  </div>
+
+  <div class="nav-item">
+    <a class="nav-btn">
+      <span class="nb-icon"><i class="fa fa-chart-column"></i></span>
+      Report View
+      <i class="fa fa-chevron-down" style="font-size:10px;opacity:0.5;margin-left:2px;"></i>
+    </a>
+    <div class="dropdown">
+      <a onclick="openForm('handoverView')">
+        <span class="dd-icon"><i class="fa fa-file-alt"></i></span> Handover Status Report
+      </a>
+      <a onclick="openForm('qcView')">
+        <span class="dd-icon"><i class="fa fa-file-medical"></i></span> QC WIP Report
+      </a>
+      <a onclick="openForm('pdView')">
+        <span class="dd-icon"><i class="fa fa-file-invoice"></i></span> PD Report
+      </a>
     </div>
   </div>
 </div>
@@ -52,12 +754,12 @@
     <div class="wc-icon">📋</div>
     <div class="wc-text">
       <h3>QAD Report Management System</h3>
-      <p>Use the navigation above to enter or view daily production quality reports.</p>
+      <p>Use the navigation above to enter or view daily production quality reports for all floors.</p>
     </div>
   </div>
 </div>
 
-<!-- POPUP -->
+<!-- ══ POPUP ══ -->
 <div id="popup" class="popup" onclick="handleOverlayClick(event)">
   <div class="popup-content">
     <span class="close-btn" onclick="closePopup()">×</span>
@@ -65,20 +767,243 @@
   </div>
 </div>
 
-<!-- LOADING -->
+<!-- ══ LOADING SPINNER ══ -->
 <div id="loadingOverlay" class="loading-overlay hidden">
   <div class="spinner"></div>
   <div class="loading-text">Submitting...</div>
 </div>
 
-<!-- TOAST -->
+<!-- ══ TOAST ══ -->
 <div class="toast" id="toast">
-  <span>✅</span>
+  <span style="font-size:18px;">✅</span>
   <span id="toastMsg">Data Submitted Successfully</span>
 </div>
 
-<!-- JS FILE -->
-<script src="script.js"></script>
+<script>
 
+let isSubmitting = false;
+
+(function(){
+  const d = new Date();
+  document.getElementById('liveDate').textContent =
+    d.toLocaleDateString('en-GB', { weekday:'short', day:'2-digit', month:'short', year:'numeric' });
+})();
+
+function handleOverlayClick(e){
+  if(e.target === document.getElementById('popup')) closePopup();
+}
+
+function openForm(type){
+  const box = document.getElementById("formBox");
+
+  if(type === "handover"){
+    box.innerHTML = `
+      <h2>🔄 Handover Status Entry Sheet</h2>
+      <div class="filter-bar">
+        <label>Date</label>
+        <input type="date">
+        <label>Floor</label>
+        <select>
+          <option>CCL</option><option>MHTL</option><option>HTL-2</option>
+          <option>CCL-07</option><option>BDTEX</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+      <table>
+        <tr>
+          <th rowspan="3">SHIFT</th>
+          <th colspan="4">FINISHING TO QC</th>
+          <th colspan="4">QC INSPECTION</th>
+          <th colspan="4">QC TO PACKING</th>
+          <th colspan="4">PROBLEMATIC</th>
+          <th colspan="3">JOB CARD</th>
+        </tr>
+        <tr>
+          <td>No Of Batch</td><td>Fresh RCV.Qty(kg)</td><td>J/C RCV. Qty(kg)</td><td>F.Sale Qty(kg)</td>
+          <td>No Of Batch</td><td>Fresh INS.Qty(kg)</td><td>J/C INS. Qty(kg)</td><td>F.Sale INS. Qty(kg)</td>
+          <td>No Of Batch</td><td>Fresh H.O.Qty(kg)</td><td>J/C H.O Qty(kg)</td><td>F.Sale H.O Qty(kg)</td>
+          <td>No Of Batch</td><td>Fresh PD.Qty(kg)</td><td>J/C PD Qty(kg)</td><td>F.Sale PD Qty(kg)</td>
+          <td>No Of Batch</td><td>IN Qty(kg)</td><td>Previous J/C Qty(kg)</td>
+        </tr>
+        <tbody id="handoverBody"></tbody>
+      </table>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-clear" onclick="clearData()"><i class="fa fa-eraser"></i> CLEAR</button>
+        <button class="btn btn-submit" onclick="submitData()"><i class="fa fa-paper-plane"></i> SUBMIT</button>
+      </div>`;
+
+    setTimeout(()=>{
+      const tbody = document.getElementById("handoverBody");
+      tbody.innerHTML = "";
+      ["A","B","C"].forEach((s,i)=>{
+        let row = `<tr><td><span class="shift-badge shift-${s}">${s}</span></td>`;
+        for(let j=0;j<19;j++) row += `<td><input type="number"></td>`;
+        tbody.innerHTML += row + `</tr>`;
+      });
+    },80);
+  }
+
+  else if(type === "qc"){
+    box.innerHTML = `
+      <h2>🔬 QC WIP Entry Sheet</h2>
+      <div class="filter-bar">
+        <label>Date</label>
+        <input type="date">
+        <label>Floor</label>
+        <select>
+          <option>CCL-A</option><option>CCL-B</option><option>MTL</option>
+          <option>HTL</option><option>HTL-2</option><option>CCL-07</option><option>DBTEX</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+      <table>
+        <tr class="section">
+          <th colspan="4" rowspan="2">QC STOCK</th>
+          <th colspan="4">AFTER COMPACTING JOB CARD</th>
+          <th colspan="4">D/L HOLED SPINNING & KNITTING</th>
+          <th colspan="4">B4 COMPACTING J/C</th>
+          <th colspan="8">JOB CARD RESOLVED PENDING STATUS</th>
+        </tr>
+        <tr class="section">
+          <th colspan="2">DYEING</th><th colspan="2">FINISHING</th>
+          <th colspan="2">SPINNING</th><th colspan="2">KNITTING</th>
+          <th colspan="2">DYEING</th><th colspan="2">FINISHING</th>
+          <th colspan="2">PREV NOT OK</th><th colspan="2">NEW ADD</th>
+          <th colspan="2">OK JOB CARD</th><th colspan="2">CURRENT NOT OK</th>
+        </tr>
+        <tr class="sub-header">
+          <th>W.F SHADE</th><th>W.F TEST</th><th>W.F RFD</th><th>INS RUN + GSM</th>
+          ${"<th>NO OF BATCH</th><th>KG</th>".repeat(10)}
+        </tr>
+        <tbody id="qcBody"></tbody>
+      </table>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-clear" onclick="clearData()"><i class="fa fa-eraser"></i> CLEAR</button>
+        <button class="btn btn-submit" onclick="submitData()"><i class="fa fa-paper-plane"></i> SUBMIT</button>
+      </div>`;
+
+    setTimeout(()=>{
+      const tbody = document.getElementById("qcBody");
+      let row = `<tr>`;
+      for(let i=0;i<24;i++) row += `<td><input type="number"></td>`;
+      tbody.innerHTML = row + `</tr>`;
+    },80);
+  }
+
+  else if(type === "pd"){
+    box.innerHTML = `
+      <h2>🚚 PD Delivery Entry Sheet</h2>
+      <div class="filter-bar">
+        <label>Date</label>
+        <input type="date">
+        <label>Floor</label>
+        <select>
+          <option>CCL-A</option><option>CCL-B</option><option>MTL</option>
+          <option>HTL</option><option>HTL-2 (CCL-A)</option><option>HTL-2 (CCL-B)</option>
+          <option>HTL-2</option><option>CCL-07</option><option>DBTEX</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+      <table>
+        <tr>
+          <th>DELIVERY QTY</th><th>DYEING PD</th><th>FINISHING PD</th>
+          <th>SPINNING PD</th><th>KNITTING PD</th>
+        </tr>
+        <tbody id="pdBody"></tbody>
+      </table>
+      </div>
+      <div class="action-bar">
+        <button class="btn btn-clear" onclick="clearData()"><i class="fa fa-eraser"></i> CLEAR</button>
+        <button class="btn btn-submit" onclick="submitData()"><i class="fa fa-paper-plane"></i> SUBMIT</button>
+      </div>`;
+
+    setTimeout(()=>{
+      const tbody = document.getElementById("pdBody");
+      let row = `<tr>`;
+      for(let i=0;i<5;i++) row += `<td><input type="number"></td>`;
+      tbody.innerHTML = row + `</tr>`;
+    },80);
+  }
+
+  else if(type === "handoverView"){
+    box.innerHTML = `<div class="wait-screen"><div class="spinner"></div><p>Handover Status Report — Coming Soon</p></div>`;
+  }
+  else if(type === "qcView"){
+    box.innerHTML = `<div class="wait-screen"><div class="spinner"></div><p>QC WIP Report — Coming Soon</p></div>`;
+  }
+  else if(type === "pdView"){
+    box.innerHTML = `<div class="wait-screen"><div class="spinner"></div><p>PD Report — Coming Soon</p></div>`;
+  }
+
+  document.getElementById("popup").style.display = "flex";
+}
+
+function closePopup(){
+  const popup = document.getElementById("popup");
+  popup.style.opacity = "0";
+  setTimeout(()=>{ popup.style.display = "none"; popup.style.opacity = ""; }, 200);
+}
+
+function clearData(){
+  document.querySelectorAll("input").forEach(i=>{ if(i.type !== "date") i.value = ""; });
+}
+
+function showToast(msg){
+  const t = document.getElementById("toast");
+  document.getElementById("toastMsg").textContent = msg;
+  t.classList.add("show");
+  setTimeout(()=> t.classList.remove("show"), 3200);
+}
+
+async function submitData(){
+  if(isSubmitting) return;
+  isSubmitting = true;
+
+  document.getElementById("loadingOverlay").classList.remove("hidden");
+
+  try {
+    let type = "handover";
+    if(document.querySelector("#qcBody")) type = "qc";
+    if(document.querySelector("#pdBody")) type = "pd";
+
+    const rawDate = document.querySelector("input[type='date']").value;
+    const floor   = document.querySelector("select").value.trim();
+
+    if(type === "handover"){
+      const rows = document.querySelectorAll("#handoverBody tr");
+      const shifts = ["A","B","C"];
+      for(let i = 0; i < rows.length; i++){
+        const inputs = rows[i].querySelectorAll("input");
+        const rowData = [...inputs].map(x => x.value || "");
+        await sendToSheet(type, [rawDate, floor, shifts[i], ...rowData]);
+      }
+    } else {
+      const inputs = document.querySelectorAll("table input");
+      const row = [...inputs].map(x => x.value || "");
+      await sendToSheet(type, [rawDate, floor, ...row]);
+    }
+
+    showToast("✅ Data Submitted Successfully");
+    clearData();
+
+  } catch (err) {
+    showToast("❌ Submission Failed");
+  }
+
+  isSubmitting = false;
+  document.getElementById("loadingOverlay").classList.add("hidden");
+}
+
+function sendToSheet(type, row){
+  return fetch("https://script.google.com/macros/s/AKfycbxzrr41_BCJlAgRPGpAfogUmKz4UlhCSYFPedGsf53dOTp5ZoDGM_7rGSt4GT0LD2x-Aw/exec",{
+    method:"POST",
+    body: JSON.stringify({ type, row })
+  }).then(r => r.json());
+}
+
+document.addEventListener("keydown", e=>{ if(e.key === "Escape") closePopup(); });
+</script>
 </body>
 </html>
