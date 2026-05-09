@@ -1,135 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>QAD Report System</title>
+<title>QAD Report System — Mymun Complex</title>
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/navbar.css">
-  <link rel="stylesheet" href="css/popup.css">
-  <link rel="stylesheet" href="css/table.css">
+<link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-<!-- TOP BAR -->
-<div class="top-bar">
+<!-- সব HTML BODY এখানে থাকবে -->
 
-  <div class="brand">
-    <div class="logo-ring">
-      <img src="assets/logo.png" class="logo">
-    </div>
-
-    <div class="brand-text">
-      <h1>MYMUN COMPLEX</h1>
-      <p>QAD Report System</p>
-    </div>
-  </div>
-
-  <div class="date-chip">
-    <div class="dc-label">Today</div>
-    <div class="dc-val" id="liveDate">—</div>
-  </div>
-
-</div>
-
-<!-- NAVBAR -->
-<div class="navbar-wrap">
-
-  <div class="nav-item">
-    <a class="nav-btn">
-      <span class="nb-icon">
-        <i class="fa fa-pen"></i>
-      </span>
-
-      Report Entry
-    </a>
-
-    <div class="dropdown">
-
-      <a onclick="openForm('handover')">
-        Handover Status
-      </a>
-
-      <a onclick="openForm('qc')">
-        QC WIP
-      </a>
-
-      <a onclick="openForm('pd')">
-        PD Delivery
-      </a>
-
-    </div>
-  </div>
-
-</div>
-
-<!-- PAGE -->
-<div class="page-body">
-
-  <div class="welcome-card">
-    <div class="wc-icon">📋</div>
-
-    <div class="wc-text">
-      <h3>QAD Report Management System</h3>
-      <p>Daily production quality reports.</p>
-    </div>
-  </div>
-
-</div>
-
-<!-- POPUP -->
-<div id="popup" class="popup">
-
-  <div class="popup-content">
-
-    <span class="close-btn"
-    onclick="closePopup()">×</span>
-
-    <div id="formBox"></div>
-
-  </div>
-
-</div>
-
-<!-- LOADING -->
-<div id="loadingOverlay"
-class="loading-overlay hidden">
-
-  <div class="spinner"></div>
-  <div class="loading-text">Submitting...</div>
-
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast">
-
-  <span>✅</span>
-  <span id="toastMsg">
-    Data Submitted Successfully
-  </span>
-
-</div>
-
-<!-- JS -->
-<script src="js/handover.js"></script>
-<script src="js/qc.js"></script>
-<script src="js/pd.js"></script>
-
-<script src="js/forms.js"></script>
-<script src="js/popup.js"></script>
-<script src="js/submit.js"></script>
-<script src="js/main.js"></script>
+<script src="main.js"></script>
 
 </body>
 </html>
