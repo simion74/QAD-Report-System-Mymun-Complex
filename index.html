@@ -345,7 +345,7 @@ function doLogin(){
     document.getElementById('s-msg').textContent = 'Welcome back, ' + (u.name||id) + '!';
     go('sc-success');
     // countdown & auto redirect
-    let secs = 3;
+    let secs = 0;
     const ct = document.getElementById('cntdown');
     ct.textContent = secs;
     const timer = setInterval(()=>{
