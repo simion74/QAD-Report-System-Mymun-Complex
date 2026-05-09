@@ -3,23 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>QAD Report System — Mymun Complex</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+<!-- CSS FILE -->
 <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
-<!-- সব HTML BODY এখানে থাকবে -->
+<!-- ══ TOP BAR ══ -->
+<div class="top-bar">
+  <div class="brand">
+    <div class="logo-ring">
+      <img src="https://i.ibb.co/JRKy96MH/dbl-logo.png" class="logo" alt="DBL Logo">
+    </div>
+    <div class="brand-text">
+      <h1>MYMUN COMPLEX</h1>
+      <p>QAD Report System · Quality Assurance Division</p>
+    </div>
+  </div>
+  <div class="date-chip">
+    <div class="dc-label">Today</div>
+    <div class="dc-val" id="liveDate">—</div>
+  </div>
+</div>
 
-<script src="main.js"></script>
+<!-- ══ NAVBAR ══ -->
+<div class="navbar-wrap">
+  <div class="nav-item">
+    <a class="nav-btn">
+      <span class="nb-icon"><i class="fa fa-pen"></i></span>
+      Report Entry
+    </a>
+    <div class="dropdown">
+      <a onclick="openForm('handover')"><span class="dd-icon"><i class="fa fa-exchange-alt"></i></span> Handover Status</a>
+      <a onclick="openForm('qc')"><span class="dd-icon"><i class="fa fa-microscope"></i></span> QC WIP</a>
+      <a onclick="openForm('pd')"><span class="dd-icon"><i class="fa fa-truck"></i></span> PD Delivery</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE BODY ══ -->
+<div class="page-body">
+  <div class="welcome-card">
+    <div class="wc-icon">📋</div>
+    <div class="wc-text">
+      <h3>QAD Report Management System</h3>
+      <p>Use the navigation above to enter or view daily production quality reports.</p>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div id="popup" class="popup" onclick="handleOverlayClick(event)">
+  <div class="popup-content">
+    <span class="close-btn" onclick="closePopup()">×</span>
+    <div id="formBox"></div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loadingOverlay" class="loading-overlay hidden">
+  <div class="spinner"></div>
+  <div class="loading-text">Submitting...</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span>✅</span>
+  <span id="toastMsg">Data Submitted Successfully</span>
+</div>
+
+<!-- JS FILE -->
+<script src="script.js"></script>
 
 </body>
 </html>
