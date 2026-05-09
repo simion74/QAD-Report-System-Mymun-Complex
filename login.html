@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBL Group — Login</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  :root{
+    --green-dark:  #1a5c2a;
+    --green-mid:   #236b33;
+    --green-light: #2e8b45;
+    --gold:        #c9a227;
+    --gold-light:  #e0b93a;
+    --mint-bg:     #e8f5ed;
+    --mint-grid:   #d0ecd8;
+    --white:       #ffffff;
+    --text-dark:   #1a3d22;
+    --text-mid:    #4a7a55;
+    --text-light:  #7aaa82;
+    --border:      #b5dcc0;
+  }
+
+  body{
+    min-height:100vh;
+    background-color: var(--mint-bg);
+    background-image:
+      linear-gradient(var(--mint-grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--mint-grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:'Inter',sans-serif;
+    position:relative;overflow-x:hidden;
+    padding: 1rem;
+  }
+
+  /* ── CARD ── */
+  .card{
+    background:var(--white);
+    border-radius:18px;
+    width:100%;max-width:400px;
+    overflow:hidden;
+    box-shadow:0 8px 40px rgba(26,92,42,0.15), 0 2px 8px rgba(0,0,0,0.06);
+    border:1px solid var(--border);
+  }
+
+  .card-head{
+    background:
+      radial-gradient(ellipse 70% 120% at 0% 50%,   rgba(0,180,100,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 55% 100% at 100% 50%,  rgba(0,80,200,0.12) 0%, transparent 60%),
+      linear-gradient(125deg,
+        #062e1f 0%, #0a5c3e 22%, #0e7a52 42%,
+        #127a52 58%, #0a6644 75%, #063d28 88%, #041f15 100%
+      );
+    padding:1.4rem 2rem 1.2rem;
+    text-align:center;
+    position:relative;overflow:hidden;
+  }
+  .card-head::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.06);}
+  .card-head::after{content:'';position:absolute;bottom:-20px;left:-20px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,0.04);}
+
+  .ch-logo{
+    width:68px;height:68px;border-radius:50%;background:white;
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto .7rem;
+    border:3px solid rgba(255,255,255,0.3);
+    box-shadow:0 4px 18px rgba(0,0,0,0.2);
+    overflow:hidden;position:relative;z-index:1;
+  }
+  .ch-logo img{width:56px;height:56px;object-fit:contain;}
+  .ch-name{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:800;color:white;letter-spacing:2px;text-transform:uppercase;position:relative;z-index:1;margin-bottom:2px;text-shadow:0 2px 10px rgba(0,0,0,0.3);}
+  .ch-sub{font-size:9.5px;color:rgba(255,255,255,0.6);letter-spacing:1.8px;text-transform:uppercase;position:relative;z-index:1;}
+  .gold-line{height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin-top:1rem;position:relative;z-index:1;}
+
+  .card-body{padding:1.5rem 1.8rem 1.6rem;}
+  .screen{display:none;} .screen.active{display:block;}
+
+  .pg-title{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:var(--text-dark);margin-bottom:2px;}
+  .pg-sub{font-size:11.5px;color:var(--text-light);margin-bottom:1.1rem;}
+
+  /* Fields */
+  .field{margin-bottom:.8rem;}
+  .field label{display:block;font-size:10px;font-weight:600;color:var(--text-mid);margin-bottom:4px;letter-spacing:.7px;text-transform:uppercase;}
+  .fi{position:relative;display:flex;align-items:center;}
+  .fi i.ico{position:absolute;left:10px;font-size:14px;color:var(--green-light);pointer-events:none;}
+  .fi input{
+    width:100%;background:#f4faf5;
+    border:1.5px solid var(--border);border-radius:8px;
+    padding:9px 9px 9px 33px;font-size:13px;color:var(--text-dark);
+    font-family:'Inter',sans-serif;outline:none;
+    transition:border .2s,background .2s,box-shadow .2s;
+  }
+  .fi input::placeholder{color:#b0ccb5;}
+  .fi input:focus{border-color:var(--green-mid);background:#eef7f0;box-shadow:0 0 0 3px rgba(35,107,51,0.1);}
+  .eye{position:absolute;right:8px;background:none;border:none;cursor:pointer;color:#b0ccb5;font-size:14px;display:flex;align-items:center;padding:4px;transition:color .2s;}
+  .eye:hover{color:var(--green-mid);}
+
+  .forgot-row{text-align:right;margin:-2px 0 .8rem;}
+  .forgot-row a{font-size:11px;color:var(--gold);text-decoration:none;cursor:pointer;font-weight:600;}
+  .forgot-row a:hover{color:var(--gold-light);}
+
+  .btn-primary{
+    width:100%;padding:10.5px;border:none;border-radius:8px;
+    background:linear-gradient(135deg,var(--green-dark) 0%,var(--green-light) 100%);
+    font-size:13px;font-weight:700;color:white;cursor:pointer;
+    font-family:'Montserrat',sans-serif;letter-spacing:.5px;
+    transition:opacity .2s,transform .1s,box-shadow .2s;
+    box-shadow:0 4px 14px rgba(26,92,42,0.3);
+  }
+  .btn-primary:hover{opacity:.91;box-shadow:0 6px 18px rgba(26,92,42,0.38);}
+  .btn-primary:active{transform:scale(.99);}
+
+  .divider{display:flex;align-items:center;gap:10px;margin:.85rem 0;}
+  .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+  .divider span{font-size:11px;color:var(--text-light);}
+
+  .link-row{text-align:center;font-size:11.5px;color:var(--text-light);}
+  .link-row a{color:var(--gold);text-decoration:none;font-weight:700;cursor:pointer;}
+  .link-row a:hover{color:var(--gold-light);}
+
+  .alert{border-radius:7px;padding:7px 10px;font-size:11.5px;margin-bottom:.8rem;display:none;align-items:center;gap:7px;}
+  .alert.show{display:flex;}
+  .alert.err{background:#fff3f3;border:1.5px solid #f5c0c0;color:#b03030;}
+  .alert.ok{background:#f0faf3;border:1.5px solid #9ed4aa;color:#1a6b2f;}
+
+  .back-btn{display:flex;align-items:center;gap:5px;background:none;border:none;cursor:pointer;color:var(--text-light);font-size:11.5px;font-family:'Inter',sans-serif;margin-bottom:.8rem;padding:0;transition:color .2s;}
+  .back-btn:hover{color:var(--green-mid);}
+
+  .strength-bar{display:flex;gap:4px;margin-top:4px;}
+  .strength-bar span{flex:1;height:3px;border-radius:2px;background:var(--border);transition:background .3s;}
+
+  .badge-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:1.1rem;flex-wrap:wrap;}
+  .badge{display:flex;align-items:center;gap:3px;font-size:9.5px;color:var(--text-light);}
+  .badge i{font-size:11px;color:var(--green-light);}
+  .badge-sep{width:3px;height:3px;border-radius:50%;background:var(--border);}
+
+  /* Success screen */
+  .success-icon{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--green-dark),var(--green-light));display:flex;align-items:center;justify-content:center;margin:0 auto .9rem;box-shadow:0 0 28px rgba(26,92,42,0.25);}
+  .success-icon i{font-size:28px;color:white;}
+  .countdown{font-size:11px;color:var(--text-light);margin-top:.7rem;}
+  .countdown span{font-weight:700;color:var(--green-mid);}
+
+  .footer{text-align:center;font-size:10px;color:var(--text-light);margin-top:1rem;}
+
+  @media(max-width:440px){
+    .card-body{padding:1.2rem 1.3rem 1.4rem;}
+    .card-head{padding:1.1rem 1.3rem 1rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- Card Header -->
+  <div class="card-head">
+    <div class="ch-logo">
+      <img src="https://i.ibb.co/JRKy96MH/dbl-logo.png" alt="DBL">
+    </div>
+    <div class="ch-name">MYMUN COMPLEX</div>
+    <div class="ch-sub">QAD Report System &nbsp;·&nbsp; Secure Access</div>
+    <div class="gold-line"></div>
+  </div>
+
+  <div class="card-body">
+
+    <!-- ===== LOGIN ===== -->
+    <div class="screen active" id="sc-login">
+      <div class="pg-title">Welcome Back 👋</div>
+      <div class="pg-sub">Sign in to access the QAD Report System</div>
+      <div class="alert err" id="login-alert"></div>
+      <div class="field">
+        <label>Employee ID</label>
+        <div class="fi"><i class="ti ti-id-badge-2 ico"></i>
+          <input type="text" id="l-id" placeholder="Enter your Employee ID"></div>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="fi"><i class="ti ti-lock ico"></i>
+          <input type="password" id="l-pass" placeholder="Enter your password">
+          <button class="eye" onclick="tp('l-pass',this)" type="button"><i class="ti ti-eye"></i></button>
+        </div>
+      </div>
+      <div class="forgot-row"><a onclick="go('sc-forgot')">Forgot Password?</a></div>
+      <button class="btn-primary" onclick="doLogin()">Sign In &nbsp;→</button>
+      <div class="divider"><span>OR</span></div>
+      <div class="link-row">New here? <a onclick="go('sc-signup')">Create an Account</a></div>
+      <div class="badge-row">
+        <div class="badge"><i class="ti ti-shield-check"></i>Secure Login</div>
+        <div class="badge-sep"></div>
+        <div class="badge"><i class="ti ti-lock"></i>256-bit SSL</div>
+        <div class="badge-sep"></div>
+        <div class="badge"><i class="ti ti-certificate"></i>Encrypted</div>
+      </div>
+    </div>
+
+    <!-- ===== SIGN UP ===== -->
+    <div class="screen" id="sc-signup">
+      <button class="back-btn" onclick="go('sc-login')"><i class="ti ti-arrow-left"></i> Back to Sign In</button>
+      <div class="pg-title">Create Account</div>
+      <div class="pg-sub">Register to get access to the portal</div>
+      <div class="alert err" id="signup-alert"></div>
+      <div class="field">
+        <label>Full Name</label>
+        <div class="fi"><i class="ti ti-user ico"></i>
+          <input type="text" id="s-name" placeholder="Your full name"></div>
+      </div>
+      <div class="field">
+        <label>Employee ID</label>
+        <div class="fi"><i class="ti ti-id-badge-2 ico"></i>
+          <input type="text" id="s-id" placeholder="Enter your Employee ID"></div>
+      </div>
+      <div class="field">
+        <label>Phone Number</label>
+        <div class="fi"><i class="ti ti-phone ico"></i>
+          <input type="tel" id="s-phone" placeholder="e.g. 01XXXXXXXXX"></div>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="fi"><i class="ti ti-lock ico"></i>
+          <input type="password" id="s-pass" placeholder="Create a strong password" oninput="chkStr(this.value)">
+          <button class="eye" onclick="tp('s-pass',this)" type="button"><i class="ti ti-eye"></i></button>
+        </div>
+        <div class="strength-bar"><span id="b1"></span><span id="b2"></span><span id="b3"></span><span id="b4"></span></div>
+      </div>
+      <div class="field">
+        <label>Confirm Password</label>
+        <div class="fi"><i class="ti ti-lock-check ico"></i>
+          <input type="password" id="s-pass2" placeholder="Re-enter your password">
+          <button class="eye" onclick="tp('s-pass2',this)" type="button"><i class="ti ti-eye"></i></button>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="doSignup()">Create Account &nbsp;→</button>
+    </div>
+
+    <!-- ===== FORGOT PASSWORD ===== -->
+    <div class="screen" id="sc-forgot">
+      <button class="back-btn" onclick="go('sc-login')"><i class="ti ti-arrow-left"></i> Back to Sign In</button>
+      <div class="pg-title">Reset Password</div>
+      <div class="pg-sub">Verify your identity to reset your password</div>
+      <div class="alert err" id="forgot-alert"></div>
+      <div class="field">
+        <label>Employee ID</label>
+        <div class="fi"><i class="ti ti-id-badge-2 ico"></i>
+          <input type="text" id="f-id" placeholder="Enter your Employee ID"></div>
+      </div>
+      <div class="field">
+        <label>Full Name</label>
+        <div class="fi"><i class="ti ti-user ico"></i>
+          <input type="text" id="f-name" placeholder="Enter your registered Full Name"></div>
+      </div>
+      <div class="field">
+        <label>Phone Number</label>
+        <div class="fi"><i class="ti ti-phone ico"></i>
+          <input type="tel" id="f-phone" placeholder="Enter your registered Phone Number"></div>
+      </div>
+      <button class="btn-primary" onclick="doForgot()">Verify &amp; Continue &nbsp;→</button>
+    </div>
+
+    <!-- ===== RESET PASSWORD ===== -->
+    <div class="screen" id="sc-reset">
+      <div class="pg-title">Set New Password</div>
+      <div class="pg-sub">Choose a strong new password for your account</div>
+      <div class="alert err" id="reset-alert"></div>
+      <div class="field">
+        <label>New Password</label>
+        <div class="fi"><i class="ti ti-lock ico"></i>
+          <input type="password" id="r-pass" placeholder="Enter new password">
+          <button class="eye" onclick="tp('r-pass',this)" type="button"><i class="ti ti-eye"></i></button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Confirm New Password</label>
+        <div class="fi"><i class="ti ti-lock-check ico"></i>
+          <input type="password" id="r-pass2" placeholder="Confirm new password">
+          <button class="eye" onclick="tp('r-pass2',this)" type="button"><i class="ti ti-eye"></i></button>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="doReset()">Update Password &nbsp;→</button>
+    </div>
+
+    <!-- ===== SUCCESS ===== -->
+    <div class="screen" id="sc-success">
+      <div style="text-align:center;padding:.4rem 0">
+        <div class="success-icon"><i class="ti ti-check"></i></div>
+        <div class="pg-title" style="text-align:center;font-size:17px;margin-bottom:4px">Login Successful!</div>
+        <div class="pg-sub" style="text-align:center;margin-bottom:.5rem" id="s-msg">Welcome to QAD Report System</div>
+        <div class="countdown">Redirecting to Dashboard in <span id="cntdown">3</span>s...</div>
+      </div>
+    </div>
+
+  </div><!-- /card-body -->
+</div><!-- /card -->
+
+<div class="footer">© 2026 DBL Group · MYMUN COMPLEX · Quality Assurance Division</div>
+
+<script>
+// ── In-memory user store ──
+const users = [{ id:'admin', name:'Simion Basky', phone:'01776198344', pass:'741032' }];
+let resetTarget = null; // stores the user being reset
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function showAlert(id, msg, type='err'){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.textContent = msg;
+  el.className = 'alert show ' + (type==='ok' ? 'ok' : 'err');
+}
+function clearA(id){ const el=document.getElementById(id); if(el) el.className='alert err'; }
+
+function tp(id, btn){
+  const inp = document.getElementById(id);
+  const ico = btn.querySelector('i');
+  inp.type = inp.type==='password' ? 'text' : 'password';
+  ico.className = inp.type==='text' ? 'ti ti-eye-off' : 'ti ti-eye';
+}
+
+function chkStr(v){
+  const cs=['#c0392b','#e67e22','#27ae60','#1a5c2a'];
+  let sc=0;
+  if(v.length>=6) sc++;
+  if(v.length>=10) sc++;
+  if(/[A-Z]/.test(v)||/[0-9]/.test(v)) sc++;
+  if(/[^A-Za-z0-9]/.test(v)) sc++;
+  ['b1','b2','b3','b4'].forEach((b,i)=>{
+    document.getElementById(b).style.background = i<sc ? cs[sc-1] : '#b5dcc0';
+  });
+}
+
+// ── LOGIN ──
+function doLogin(){
+  clearA('login-alert');
+  const id   = document.getElementById('l-id').value.trim();
+  const pass = document.getElementById('l-pass').value;
+  if(!id||!pass){ showAlert('login-alert','⚠ Please enter your Employee ID and Password'); return; }
+  const u = users.find(u => u.id===id && u.pass===pass);
+  if(u){
+    document.getElementById('s-msg').textContent = 'Welcome back, ' + (u.name||id) + '!';
+    go('sc-success');
+    // countdown & auto redirect
+    let secs = 3;
+    const ct = document.getElementById('cntdown');
+    ct.textContent = secs;
+    const timer = setInterval(()=>{
+      secs--;
+      ct.textContent = secs;
+      if(secs <= 0){
+        clearInterval(timer);
+        // ── Replace this URL with your actual dashboard URL ──
+        window.location.href = 'mymun_qad.html';
+      }
+    }, 1000);
+  } else {
+    showAlert('login-alert','✕ Invalid Employee ID or Password. Please try again.');
+  }
+}
+
+// ── SIGN UP ──
+function doSignup(){
+  clearA('signup-alert');
+  const name  = document.getElementById('s-name').value.trim();
+  const id    = document.getElementById('s-id').value.trim();
+  const phone = document.getElementById('s-phone').value.trim();
+  const pass  = document.getElementById('s-pass').value;
+  const pass2 = document.getElementById('s-pass2').value;
+  if(!name||!id||!phone||!pass||!pass2){ showAlert('signup-alert','⚠ All fields are required'); return; }
+  if(pass!==pass2){ showAlert('signup-alert','✕ Passwords do not match'); return; }
+  if(pass.length<4){ showAlert('signup-alert','⚠ Password must be at least 4 characters'); return; }
+  if(users.find(u=>u.id===id)){ showAlert('signup-alert','✕ This Employee ID is already registered'); return; }
+  users.push({ id, name, phone, pass });
+  showAlert('signup-alert','✓ Account created successfully! Redirecting...','ok');
+  setTimeout(()=>go('sc-login'), 1600);
+}
+
+// ── FORGOT PASSWORD ──
+function doForgot(){
+  clearA('forgot-alert');
+  const id    = document.getElementById('f-id').value.trim().toLowerCase();
+  const name  = document.getElementById('f-name').value.trim().toLowerCase();
+  const phone = document.getElementById('f-phone').value.trim();
+  if(!id||!name||!phone){ showAlert('forgot-alert','⚠ Please fill in all three fields'); return; }
+  const u = users.find(u =>
+    u.id.toLowerCase()===id &&
+    u.name.toLowerCase()===name &&
+    u.phone===phone
+  );
+  if(!u){ showAlert('forgot-alert','✕ Details do not match any registered account'); return; }
+  resetTarget = u;
+  go('sc-reset');
+}
+
+// ── RESET PASSWORD ──
+function doReset(){
+  clearA('reset-alert');
+  const p  = document.getElementById('r-pass').value;
+  const p2 = document.getElementById('r-pass2').value;
+  if(!p||!p2){ showAlert('reset-alert','⚠ Please fill in both fields'); return; }
+  if(p!==p2){ showAlert('reset-alert','✕ Passwords do not match'); return; }
+  if(p.length<4){ showAlert('reset-alert','⚠ Password must be at least 4 characters'); return; }
+  if(resetTarget){ resetTarget.pass = p; resetTarget = null; }
+  showAlert('reset-alert','✓ Password updated successfully! Redirecting...','ok');
+  setTimeout(()=>go('sc-login'), 1500);
+}
+
+// ── ENTER KEY SUPPORT ──
+document.addEventListener('keydown', e=>{
+  if(e.key!=='Enter') return;
+  const a = document.querySelector('.screen.active');
+  if(!a) return;
+  if(a.id==='sc-login')  doLogin();
+  else if(a.id==='sc-signup') doSignup();
+  else if(a.id==='sc-forgot') doForgot();
+  else if(a.id==='sc-reset')  doReset();
+});
+</script>
+</body>
+</html>
+
